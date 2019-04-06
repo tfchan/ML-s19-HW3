@@ -2,8 +2,12 @@
 
 ## Prerequirte
 - python3
+- argparse
 - numpy
 
 ## Usage
 ### Gaussian data generator
-    ./hw3-1a.py [-h] [-n N_DATA] mean variance
+    ./hw3_1a.py [-h] [-n N_DATA] mean variance
+
+### Polynomial basis linear model data generator
+    ./hw3_1b.py [-h] [-n N_DATA] a w [w ...]
