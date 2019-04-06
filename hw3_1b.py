@@ -1,6 +1,19 @@
 #!python3
 """Polynomial basis linear model data generator."""
 from argparse import ArgumentParser
+import numpy as np
+import hw3_1a
+
+
+def polynomial(noise_var, weights, n=1):
+    """Generate n polynomial data."""
+    basis = len(weights)
+    noise = hw3_1a.normal(0, noise_var, n)
+    x = np.random.uniform(-1, 1, (n, basis))
+    for power in range(basis):
+        x[:, power] = x[:, power] ** power
+    y = x @ weights + noise
+    return y
 
 
 def main():
@@ -13,6 +26,9 @@ def main():
     parser.add_argument('-n', '--n_data', type=int, default=1,
                         help='Number of data to generate')
     args = parser.parse_args()
+
+    values = polynomial(args.a, args.w, args.n_data)
+    print(*values, sep='\n')
 
 
 if __name__ == '__main__':
