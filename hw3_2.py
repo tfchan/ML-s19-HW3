@@ -1,6 +1,26 @@
 #!python3
 """Sequential estimator of the mean and variance."""
 from argparse import ArgumentParser
+import hw3_1a
+
+
+class SequentialEstimator:
+    """Sequential estimator for mean and variance."""
+
+    def __init__(self):
+        """Initialize member variables."""
+
+    def _update_mean(self, sample):
+        """Update mean with sample."""
+
+    def _update_var(self, sample):
+        """Update var with sample."""
+
+    def add_sample(self, sample):
+        """Add sample to update estimations."""
+
+    def get_estimations(self):
+        """Return current estimations."""
 
 
 def main():
