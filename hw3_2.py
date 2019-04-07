@@ -64,6 +64,15 @@ def main():
                         help='Gaussian variance of number to be guessed')
     args = parser.parse_args()
 
+    print(f'Data point source function: N({args.mean}, {args.variance})')
+    estimator = SequentialEstimator()
+    while True:
+        sample = float(hw3_1a.normal(args.mean, args.variance))
+        print(f'Add data point: {sample}')
+        estimator.add_sample(sample)
+        print(f'Mean = {estimator.mean}\tVariance = {estimator.variance}')
+        print()
+
 
 if __name__ == '__main__':
     main()
