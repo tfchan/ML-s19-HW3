@@ -12,4 +12,7 @@
 ### Polynomial basis linear model data generator
     ./hw3_1b.py [-h] [-n N_DATA] a w [w ...]
 
+### Sequential estimator
+    ./hw3_2.py [-h] mean variance
+
 Use `-h` for more detail about each argument
