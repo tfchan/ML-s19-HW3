@@ -13,7 +13,7 @@ def polynomial(noise_var, weights, n=1):
     x_powered = np.zeros((n, basis))
     for power in range(basis):
         x_powered[:, power] = x ** power
-    y = x_powered @ weights + 0
+    y = x_powered @ weights + noise
     return y
 
 
