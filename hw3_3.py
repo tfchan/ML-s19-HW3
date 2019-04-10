@@ -2,7 +2,7 @@
 """Baysian Linear regression."""
 from argparse import ArgumentParser
 import numpy as np
-# import hw3_1b
+import hw3_1b
 
 
 class BaysianLinearRegressor():
@@ -18,9 +18,11 @@ class BaysianLinearRegressor():
         self._prior_cv = prior * np.identity(n_basis)
         self._posterior_m = None
         self._posterior_cv = None
+        self._predict_var = 0
 
     def add_sample(self, x, y):
         """Add a sample (x,y) for training."""
+        self._n_sample += 1
         x_basis = np.array([x**i for i in range(self._n_basis)])
         prior_cv_inv = np.linalg.inv(self._prior_cv)
         self._posterior_cv = np.linalg.inv(prior_cv_inv
@@ -31,6 +33,17 @@ class BaysianLinearRegressor():
                                 + self._noise_para * np.outer(x_basis, y)))
         self._prior_cv = self._posterior_cv
         self._prior_m = self._posterior_m
+        mean = self._posterior_m.flatten() @ x_basis
+        var = (self._noise_var
+               + x_basis @ self._posterior_cv @ x_basis)
+        self._predict_var = var
+        return mean, var
+
+    def is_converge(self):
+        """Return converged or not."""
+        threshold = 0.005
+        return (self._predict_var - self._noise_var < threshold
+                and self._n_sample > 0)
 
     @property
     def mean(self):
@@ -55,11 +68,9 @@ def main():
     args = parser.parse_args()
 
     regressor = BaysianLinearRegressor(len(args.w), args.a, args.b)
-    regressor.add_sample(-0.64152, 0.19039)
-    regressor.add_sample(0.07122, 1.63175)
-    regressor.add_sample(-0.19330, 0.24507)
-    # data_point = hw3_1b.polynomial(args.a, args.w)
-    # regressor.add_sample(*hw3_1b.polynomial(args.a, args.w))
+    while not regressor.is_converge():
+        data_point = hw3_1b.polynomial(args.a, args.w, return_x=True)
+        regressor.add_sample(*data_point[0])
 
 
 if __name__ == '__main__':
