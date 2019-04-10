@@ -7,11 +7,11 @@ import hw3_1a
 
 def polynomial(noise_var, weights, n=1):
     """Generate n polynomial data."""
-    basis = len(weights)
+    n_basis = len(weights)
     noise = hw3_1a.normal(0, noise_var, n)
     x = np.random.uniform(-1, 1, (n))
-    x_powered = np.zeros((n, basis))
-    for power in range(basis):
+    x_powered = np.zeros((n, n_basis))
+    for power in range(n_basis):
         x_powered[:, power] = x ** power
     y = x_powered @ weights + noise
     return y
