@@ -65,7 +65,7 @@ class SequentialEstimator:
         curr_var = self.variance
         prev_var = self.m2_to_var(self._prev_m2, self._n_sample - 1)
         var_conv = abs(prev_var - curr_var) < threshold
-        return mean_conv and var_conv
+        return mean_conv and var_conv and self._n_sample > 0
 
 
 def main():
@@ -80,7 +80,7 @@ def main():
 
     print(f'Data point source function: N({args.mean}, {args.variance})')
     estimator = SequentialEstimator()
-    while not estimator.is_converge() or estimator.n_sample == 0:
+    while not estimator.is_converge():
         sample = float(hw3_1a.normal(args.mean, args.variance))
         print(f'Add data point: {sample}')
         estimator.add_sample(sample)
