@@ -70,7 +70,13 @@ def main():
     regressor = BaysianLinearRegressor(len(args.w), args.a, args.b)
     while not regressor.is_converge():
         data_point = hw3_1b.polynomial(args.a, args.w, return_x=True)
-        regressor.add_sample(*data_point[0])
+        print(f'Add data point {data_point[0]}:\n')
+        pred_dist = regressor.add_sample(*data_point[0])
+        print('Posterior mean:', *regressor.mean, sep='\n', end='\n\n')
+        print('Posterior covariance:', *regressor.convariance, sep='\n',
+              end='\n\n')
+        print(f'Predictive distribution ~ N{pred_dist}')
+        print('--------------------------------------------------------------')
 
 
 if __name__ == '__main__':
