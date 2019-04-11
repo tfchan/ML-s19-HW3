@@ -14,15 +14,17 @@ class BaysianLinearRegressor():
         self._n_basis = n_basis
         self._noise_var = noise_var
         self._noise_para = 1 / noise_var
-        self._prior_m = np.zeros((n_basis, 1))
-        self._prior_cv = prior * np.identity(n_basis)
-        self._posterior_m = None
-        self._posterior_cv = None
+        self._prior_m = None
+        self._prior_cv = None
+        self._posterior_m = np.zeros((n_basis, 1))
+        self._posterior_cv = prior * np.identity(n_basis)
         self._predict_var = 0
 
     def add_sample(self, x, y):
         """Add a sample (x,y) for training."""
         self._n_sample += 1
+        self._prior_cv = self._posterior_cv
+        self._prior_m = self._posterior_m
         x_basis = np.array([x**i for i in range(self._n_basis)])
         prior_cv_inv = np.linalg.inv(self._prior_cv)
         self._posterior_cv = np.linalg.inv(prior_cv_inv
@@ -32,8 +34,6 @@ class BaysianLinearRegressor():
                              @ (prior_cv_inv @ self._prior_m
                                 + self._noise_para * np.outer(x_basis, y)))
         pred_dist = self.predict(x)
-        self._prior_cv = self._posterior_cv
-        self._prior_m = self._posterior_m
         self._predict_var = pred_dist[1]
         return pred_dist
 
