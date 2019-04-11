@@ -2,6 +2,7 @@
 """Baysian Linear regression."""
 from argparse import ArgumentParser
 import numpy as np
+import matplotlib.pyplot as plt
 import hw3_1b
 
 
@@ -62,6 +63,18 @@ class BaysianLinearRegressor():
         return self._posterior_cv
 
 
+def plot_curve(x, y, var, loc, data_points=None, title=''):
+    """Plot a curve of weights, with its variance curve."""
+    ax = plt.subplot(2, 2, loc)
+    ax.set_title(title)
+    ax.plot(x, y, 'k-')
+    ax.plot(x, y + var, 'r-')
+    ax.plot(x, y - var, 'r-')
+    if not (data_points is None):
+        points = np.array(data_points)
+        ax.plot(points[:, 0], points[:, 1], 'c.')
+
+
 def main():
     """Perform main task of the program."""
     parser = ArgumentParser(
@@ -73,9 +86,18 @@ def main():
                         help='Coefficients of each basis')
     args = parser.parse_args()
 
+    plt.figure()
+    x = np.arange(-2, 2, 0.05)
+    x_basis = np.array(
+        [[x_point**i for i in range(len(args.w))] for x_point in x])
+    y = x_basis @ args.w
+    plot_curve(x, y, args.a, 1, title='Ground truth')
+
     regressor = BaysianLinearRegressor(len(args.w), args.a, args.b)
+    data_points = np.empty((0, 2))
     while not regressor.is_converge():
         data_point = hw3_1b.polynomial(args.a, args.w, return_x=True)[0]
+        data_points = np.vstack((data_points, [data_point[0], data_point[1]]))
         print(f'Add data point {data_point}:\n')
         pred_dist = regressor.add_sample(*data_point)
         print('Posterior mean:', *regressor.mean, sep='\n', end='\n\n')
@@ -83,6 +105,18 @@ def main():
               end='\n\n')
         print(f'Predictive distribution ~ N{pred_dist}')
         print('--------------------------------------------------------------')
+        if data_points.shape[0] == 10:
+            y = np.array([regressor.predict(x1) for x1 in x])
+            plot_curve(x, y[:, 0], y[:, 1], 3, data_points=data_points,
+                       title='After 10 incomes')
+        elif data_points.shape[0] == 50:
+            y = np.array([regressor.predict(x1) for x1 in x])
+            plot_curve(x, y[:, 0], y[:, 1], 4, data_points=data_points,
+                       title='After 50 incomes')
+    y = np.array([regressor.predict(x1) for x1 in x])
+    plot_curve(x, y[:, 0], y[:, 1], 2, data_points=data_points,
+               title='Predict result')
+    plt.show()
 
 
 if __name__ == '__main__':
