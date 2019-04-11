@@ -15,6 +15,9 @@
 ### Sequential estimator
     ./hw3_2.py [-h] mean variance
 
+### Bayesian linear regression
+    ./hw3_3.py [-h] b a w [w ...]
+
 Use `-h` for more detail about each argument
 
 ## Reference

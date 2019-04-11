@@ -1,13 +1,13 @@
 #!python3
-"""Baysian Linear regression."""
+"""Bayesian Linear regression."""
 from argparse import ArgumentParser
 import numpy as np
 import matplotlib.pyplot as plt
 import hw3_1b
 
 
-class BaysianLinearRegressor():
-    """Online Baysian linear regression."""
+class BayesianLinearRegressor():
+    """Online Bayesian linear regression."""
 
     def __init__(self, n_basis, noise_var, prior):
         """Initializations."""
@@ -78,7 +78,7 @@ def plot_curve(x, y, var, loc, data_points=None, title=''):
 def main():
     """Perform main task of the program."""
     parser = ArgumentParser(
-        description='Baysian Linear regression using online learning')
+        description='Bayesian Linear regression using online learning')
     parser.add_argument('b', type=int,
                         help='Precision of initial prior')
     parser.add_argument('a', type=float, help='Variance of normal in noise')
@@ -93,7 +93,7 @@ def main():
     y = x_basis @ args.w
     plot_curve(x, y, args.a, 1, title='Ground truth')
 
-    regressor = BaysianLinearRegressor(len(args.w), args.a, args.b)
+    regressor = BayesianLinearRegressor(len(args.w), args.a, args.b)
     data_points = np.empty((0, 2))
     while not regressor.is_converge():
         data_point = hw3_1b.polynomial(args.a, args.w, return_x=True)[0]
