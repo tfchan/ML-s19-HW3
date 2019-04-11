@@ -31,12 +31,18 @@ class BaysianLinearRegressor():
         self._posterior_m = (self._posterior_cv
                              @ (prior_cv_inv @ self._prior_m
                                 + self._noise_para * np.outer(x_basis, y)))
+        pred_dist = self.predict(x)
+        self._prior_cv = self._posterior_cv
+        self._prior_m = self._posterior_m
+        self._predict_var = pred_dist[1]
+        return pred_dist
+
+    def predict(self, x):
+        """Predict corresponding y of x."""
+        x_basis = np.array([x**i for i in range(self._n_basis)])
         predict_mean = self._prior_m.flatten() @ x_basis
         predict_var = (self._noise_var
                        + x_basis @ self._prior_cv @ x_basis)
-        self._predict_var = predict_var
-        self._prior_cv = self._posterior_cv
-        self._prior_m = self._posterior_m
         return predict_mean, predict_var
 
     def is_converge(self):
