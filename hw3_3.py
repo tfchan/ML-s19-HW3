@@ -31,13 +31,13 @@ class BaysianLinearRegressor():
         self._posterior_m = (self._posterior_cv
                              @ (prior_cv_inv @ self._prior_m
                                 + self._noise_para * np.outer(x_basis, y)))
+        predict_mean = self._prior_m.flatten() @ x_basis
+        predict_var = (self._noise_var
+                       + x_basis @ self._prior_cv @ x_basis)
+        self._predict_var = predict_var
         self._prior_cv = self._posterior_cv
         self._prior_m = self._posterior_m
-        mean = self._posterior_m.flatten() @ x_basis
-        var = (self._noise_var
-               + x_basis @ self._posterior_cv @ x_basis)
-        self._predict_var = var
-        return mean, var
+        return predict_mean, predict_var
 
     def is_converge(self):
         """Return converged or not."""
